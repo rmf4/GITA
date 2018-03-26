@@ -18,7 +18,7 @@ def main():
 	parser.add_argument("-r","--reference", help="Genome reference .fasta file")
 	parser.add_argument("-i1","--bam1", help="Case .bam file")
 	parser.add_argument("-i2","--bam2", help="Control .bam file")
-	parser.add_argument("-w","--window-factor-size", help="Window size")
+	parser.add_argument("-w","--window-factor-size", help="Window factor size")
 
 	args = parser.parse_args()
 	bam_files = [args.bam1,args.bam2]
@@ -196,7 +196,7 @@ def cnv(k,w,annotation_file,bams):
 	fig, ax = plt.subplots()
 
 	'''
-	mediana do cromossomo
+	chromosome median
 	'''
 	
 	
@@ -223,7 +223,7 @@ def cnv(k,w,annotation_file,bams):
 	chroms = [k]
 
 	'''
-	mediana do segmento
+	segment median
 	'''
 
 	#for c in chroms:
@@ -271,10 +271,6 @@ def cnv(k,w,annotation_file,bams):
 	plt.plot(x,y,label="case")
 
 
-
-
-
-
 	trend_analisys = solve_trend(iterations,cnv_case,cnv_control,window,k,annotation_file)
 	gene_x = trend_analisys[0]
 	gene_y = trend_analisys[1]
@@ -292,16 +288,6 @@ def cnv(k,w,annotation_file,bams):
 	legend = ax.legend(loc='center left', shadow=True,bbox_to_anchor=(1, 0.5))
 
 	plt.savefig("CNV_analisys_"+k+".png", bbox_inches='tight')
-
-chroms = ["01","02","03","04","05","06","07","08","09","10",
-"11","12","13","14","15","16","17","18","19","20","21",
-"22","23","24","25","26","27","28","29","30","31","32",
-"33","34","35","36"]
-
-#chrom = make_depth_files(bams_files,genome_reference_fasta)
-chroms = ["NC_000913.3"]
-#for k in chroms:
-#	cnv(k)
 
 
 

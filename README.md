@@ -1,4 +1,4 @@
-# Genomics Immerge Trend Analisys (GITA)
+# Genomics Immerge Trends Analisys (GITA)
   
 This project take account for new approaches to analyze genomic data. 
 
