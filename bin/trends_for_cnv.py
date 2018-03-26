@@ -9,6 +9,7 @@ from math import log,ceil
 from sympy import *
 import argparse
 from Bio import SeqIO
+import subprocess
 from subprocess import Popen
 import os.path
 
@@ -63,9 +64,16 @@ def make_depth_files(window,bams_files,genome_reference_fasta):
 	for bam in bams:
 		name = bam[:bam.find(".bam")]
 		sorted_bams.append(name+"_sorted.bam")
-		
-		pipe = Popen("samtools sort -O bam "+bam+" > "+name+"_sorted.bam",shell=True)
-		pipe.wait()	
+		pipe = Popen("samtools",stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,shell=1)
+		pipe.wait()
+		version = pipe.communicate()[1].split("\n")[2]
+		if version == 'Version: 0.1.19-96b5f2294a':
+			pipe = Popen("samtools sort "+bam+" "+name+"_sorted",shell=True)
+			pipe.wait()
+		else:
+			pipe = Popen("samtools sort -O bam "+bam+" > "+name+"_sorted.bam",shell=True)
+			pipe.wait()
+
 		pipe = Popen("samtools index "+name+"_sorted.bam",shell=True)
 		pipe.wait()	
 
