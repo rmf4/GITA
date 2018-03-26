@@ -34,6 +34,8 @@ def main():
 
 	if os.path.exists("cnv.txt"):
 		new_file = open("cnv.txt","w")
+		new_file.write("Chrom\tGene_ID\tGene\tStrand\tStart\tEnd\tLog(Solution)\n")
+		new_file.flush()
 		new_file.close()
 	
 	for i in range(len(chroms)):
