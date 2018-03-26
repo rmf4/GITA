@@ -2,6 +2,7 @@ from __future__ import division
 import glob
 import collections
 import matplotlib.pyplot as plt
+matplotlib.use('Agg')
 import statistics
 from math import log,ceil
 from sympy import *
