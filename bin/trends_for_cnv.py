@@ -18,18 +18,19 @@ def main():
 	parser.add_argument("-r","--reference", help="Genome reference .fasta file")
 	parser.add_argument("-i1","--bam1", help="Case .bam file")
 	parser.add_argument("-i2","--bam2", help="Control .bam file")
-	parser.add_argument("-w","--window-size", help="Window size")
+	parser.add_argument("-w","--window-factor-size", help="Window size")
 
 	args = parser.parse_args()
 	bam_files = [args.bam1,args.bam2]
 	
 	genome_reference_fasta = args.reference
-	result = make_depth_files(bam_files,genome_reference_fasta)
+	window = args.window_factor_size
+	annotation_file = args.annotation_file
+
+	result = make_depth_files(window,bam_files,genome_reference_fasta)
+
 	chroms = result[0]
 	windows = result[1]
-
-	window = args.window_size
-	annotation_file = args.annotation_file
 
 	if os.path.exists("cnv.txt"):
 		new_file = open("cnv.txt","w")
@@ -39,7 +40,7 @@ def main():
 		cnv(chroms[i],windows[i],annotation_file,bam_files)
 	
 
-def make_depth_files(bams_files,genome_reference_fasta):
+def make_depth_files(window,bams_files,genome_reference_fasta):
 	chroms = {}
 	list_chroms = []
 	list_window = []
@@ -50,7 +51,7 @@ def make_depth_files(bams_files,genome_reference_fasta):
 	sorted_chroms = collections.OrderedDict(sorted(chroms.items()))
 	for c,l in sorted_chroms.items():
 		list_chroms.append(c)
-		list_window.append(ceil(l/float(250)))
+		list_window.append(ceil(l/float(window)))
 
 	bams = bams_files
 	sorted_bams = []
