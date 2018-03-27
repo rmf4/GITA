@@ -37,7 +37,7 @@ def main():
 
 	if os.path.exists("cnv.txt"):
 		new_file = open("cnv.txt","w")
-		new_file.write("Chrom\tGene_ID\tGene\tStrand\tStart\tEnd\tLog(Solution)\n")
+		new_file.write("Chrom\tGene_ID\tGene\tStrand\tStart Window\tEnd Window\tLog(Solution)\n")
 		new_file.flush()
 		new_file.close()
 	
@@ -67,10 +67,11 @@ def make_depth_files(window,bams_files,genome_reference_fasta):
 		pipe = Popen("samtools",stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,shell=1)
 		pipe.wait()
 		version = pipe.communicate()[1].split("\n")[2]
+		print version
 		if version == 'Version: 0.1.19-96b5f2294a':
 			pipe = Popen("samtools sort "+bam+" "+name+"_sorted",shell=True)
 			pipe.wait()
-		else:
+		else: #Version: 1.3 (using htslib 1.3)
 			pipe = Popen("samtools sort -O bam "+bam+" > "+name+"_sorted.bam",shell=True)
 			pipe.wait()
 
@@ -216,6 +217,7 @@ def cnv(k,w,annotation_file,bams):
 	
 	prefix = bams[1]
 	prefix = prefix[:prefix.find(".bam")]
+	case_name = prefix
 	files_case = search_cov_files(prefix+"_"+k+".cov")
 	
 	median_case = calculate_median_chrom(files_case,window)
@@ -223,6 +225,7 @@ def cnv(k,w,annotation_file,bams):
 	
 	prefix = bams[0]
 	prefix = prefix[:prefix.find(".bam")]
+	control_name = prefix
 	files_control = search_cov_files(prefix+"_"+k+".cov")
 	
 	median_control = calculate_median_chrom(files_control,window)
@@ -272,7 +275,7 @@ def cnv(k,w,annotation_file,bams):
 	for i in range(iterations):
 		x.append((i+1)*window )
 		y.append(cnv_control[i])
-	plt.plot(x,y,label="control")
+	plt.plot(x,y,label=control_name)
 	
 	x = []
 	y = []
@@ -280,7 +283,7 @@ def cnv(k,w,annotation_file,bams):
 	for i in range(iterations):
 		x.append((i+1)*window )
 		y.append(cnv_case[i])
-	plt.plot(x,y,label="case")
+	plt.plot(x,y,label=case_name)
 
 
 	trend_analisys = solve_trend(iterations,cnv_case,cnv_control,window,k,annotation_file)
