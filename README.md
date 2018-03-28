@@ -43,6 +43,6 @@ By following those steps, you'll install the application development environment
 
   ```bash
   (venv) $ python trends_for_cnv.py -i1 <control_bam_file> -i2 <case_bam_file> -r <genome_reference_file> -w <window_factor_size> -gff <annotation_file>
-  (venv) $ python trends_for_cnv.py -i1 <control_bam_file> -i2 <case_bam_file> -p <ploidy> -w <window_size> -r <genome_reference_file>
+  (venv) $ python trends_for_somy.py -i1 <control_bam_file> -i2 <case_bam_file> -p <ploidy> -w <window_size> -r <genome_reference_file>
 
   ```
